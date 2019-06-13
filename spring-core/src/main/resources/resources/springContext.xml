@@ -2,11 +2,95 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        https://www.springframework.org/schema/context/spring-context.xsd">
+        https://www.springframework.org/schema/context/spring-context.xsd" default-destroy-method="">
 
 
+
+
+    <!--<bean id="stuDao" class="com.john.spring.utils.FactoryUtil"
+          factory-method="createStudentDao">
+          <constructor-arg name="name" value="ddd" />
+    </bean>-->
+
+
+    <!--<bean id="stuService" class="com.john.spring.service.StudentServiceImpl" depends-on="studentDao" init-method="init" destroy-method="destroy" autowire="byName">
+        &lt;!&ndash;<property name="studentDao" ref="stuDao" />&ndash;&gt;
+    </bean>-->
+
+    <bean id="studentDao" class="com.john.spring.dao.StudentDaoImpl" init-method="init" destroy-method="destroy" depends-on="stu"  />
+
+    <bean id="stu" class="com.john.spring.bean.Student" init-method="init" destroy-method="destroy" />
+
+    <bean id="factory_util" class="com.john.spring.utils.FactoryUtil" />
+
+    <bean name="stuDao1" factory-bean="factory_util" factory-method="createServiceImpl">
+        <constructor-arg name="name" value="stuDao" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:jdbc.properties" />
+    </bean>
+
+    <!--<context:property-placeholder location="classpath:jdbc.properties" />-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" lazy-init="true"
+          p:driverClassName="${jdbc.driver.className}"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"
+          p:maxIdle="${jdbc.maxIdle}"
+          p:minIdle="${jdbc.minIdle}"
+          p:maxActive="${jdbc.maxActive}"
+    />
+
+    <!-- lifecycle about start -->
+
+    <!--<bean class="com.john.spring.lifecycle.LifeCycleWithInterface" p:sname="张三" />-->
+    <!--<bean class="com.john.spring.lifecycle.LifeCycleWithXML" init-method="init" destroy-method="destroy" p:sname="张三" />-->
+    <!--<bean class="com.john.spring.lifecycle.LifeCycleWithAnnotation" p:sname="张三" />-->
+
+    <!-- lifecycle about end -->
+
+    <!-- method lookup inject start -->
+    <!-- 注意这两个bean是prototype -->
+    <!--<bean id="banana" class="com.john.spring.methodinject.Banana" scope="prototype" />
+    <bean id="apple" class="com.john.spring.methodinject.Apple" scope="prototype" />-->
+
+    <!-- 苹果果盘 -->
+    <!--<bean id="applePlate" class="com.john.spring.methodinject.FruitPlate">
+        <lookup-method name="getFruit" bean="apple" />
+    </bean>-->
+
+    <!-- 香蕉果盘 -->
+    <!--<bean id="bananaPlate" class="com.john.spring.methodinject.FruitPlate">
+        <lookup-method name="getFruit" bean="banana" />
+    </bean>-->
+
+    <!-- method lookup inject end -->
+
+
+    <bean class="com.john.spring.bean.ResourceInject">
+        <property name="resource" value="classpath:jdbc.properties" />
+    </bean>
+
+    <beans profile="test">
+        <bean name="stu1" class="com.john.spring.bean.Student">
+            <constructor-arg type="java.lang.Integer" index="2" value="18" />
+            <constructor-arg type="java.lang.Integer" index="0" value="2" />
+            <constructor-arg name="sname" value="张三_test" />
+        </bean>
+    </beans>
+
+    <beans profile="product">
+        <bean name="stu1" class="com.john.spring.bean.Student">
+            <constructor-arg type="java.lang.Integer" index="2" value="18" />
+            <constructor-arg type="java.lang.Integer" index="0" value="2" />
+            <constructor-arg name="sname" value="张三_product" />
+        </bean>
+    </beans>
 
 </beans>
