@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="calc" class="com.john.spring.aop.Calc" />
+
+    <bean id="myAspectJ" class="com.john.spring.aop.TimerAspectJDemo" />
+
+    <aop:config>
+        <aop:pointcut id="calc_all_method_pointcut" expression="execution(* com.john.spring.aop.Calc.add(..))" />
+        <aop:aspect ref="myAspectJ">
+            <aop:around method="aroundAdvice" pointcut-ref="calc_all_method_pointcut" />
+            <aop:before method="beforeMethod" pointcut-ref="calc_all_method_pointcut" />
+            <aop:after-returning method="afterReturnMethod" pointcut-ref="calc_all_method_pointcut" returning="retVal" />
+            <aop:after method="afterMethod" pointcut-ref="calc_all_method_pointcut" />
+            <aop:after-throwing method="afterThrowing" pointcut-ref="calc_all_method_pointcut" throwing="exception" />
+        </aop:aspect>
+
+    </aop:config>
+
+</beans>
