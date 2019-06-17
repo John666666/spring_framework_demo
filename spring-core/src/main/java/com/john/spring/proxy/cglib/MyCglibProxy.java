@@ -19,7 +19,6 @@ public class MyCglibProxy implements MethodInterceptor {
         return enhancer.create();
     }
 
-
     @Override
     public Object intercept(Object target, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         log.info("通过cglib代理，方法"+method.getName()+"开始执行……");
@@ -27,7 +26,5 @@ public class MyCglibProxy implements MethodInterceptor {
         Object retVal = methodProxy.invokeSuper(target, args);
         log.info("通过cglib代理，方法"+method.getName()+"执行结束");
         return retVal;
-
-
     }
 }

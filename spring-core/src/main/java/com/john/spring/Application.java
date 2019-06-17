@@ -6,7 +6,6 @@ import com.john.spring.service.StudentServiceImpl;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Import({MyTransactionConf.class})
 @Configuration
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     )*/
 @PropertySource("classpath:jdbc.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableTransactionManagement
 public class Application {
 
     @Bean

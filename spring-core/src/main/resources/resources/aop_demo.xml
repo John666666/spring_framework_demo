@@ -9,7 +9,7 @@
 
 
     <!-- 自定义AOP切面， 演示：对Calc类中add方法的执行时间统计 -->
-    <bean id="calc" class="com.john.spring.aop.Calc" />
+    <bean id="calc" class="com.john.spring.aop.CalcImpl" />
     <bean id="myAspectJ" class="com.john.spring.aop.TimerAspectJDemo" />
     <aop:config>
         <aop:pointcut id="calc_all_method_pointcut" expression="execution(* com.john.spring.aop.Calc.add(..))" />
@@ -23,7 +23,10 @@
     </aop:config>
 
 
-    <!-- XML方式配置Spring声明式事务 -->
+    <!-- 在XML中开启aop注解支持 -->
+    <!--<aop:aspectj-autoproxy />-->
+
+    <!-- XML方式配置Spring声明式事务，演示为不同的业务类配置不同的事务策略 -->
     <!--<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
@@ -35,9 +38,16 @@
             <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>
+    <tx:advice id="noTxAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="NEVER" />
+        </tx:attributes>
+    </tx:advice>
     <aop:config>
         <aop:pointcut id="all_dao_method_pointcut" expression="execution(* com.john.spring.dao.*.*(..))" />
+        <aop:pointcut id="noTxServiceOperation" expression="execution(* x.y.service.ddl.DefaultDdlManager.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="all_dao_method_pointcut" />
+        <aop:advisor pointcut-ref="noTxServiceOperation" advice-ref="noTxAdvice"/>
     </aop:config>-->
     <!-- 声明式事务配置结束 -->
 
