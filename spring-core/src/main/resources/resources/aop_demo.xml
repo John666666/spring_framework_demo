@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <bean id="calc" class="com.john.spring.aop.CalcImpl" />
 
+    <!-- 自定义AOP切面， 演示：对Calc类中add方法的执行时间统计 -->
+    <bean id="calc" class="com.john.spring.aop.Calc" />
     <bean id="myAspectJ" class="com.john.spring.aop.TimerAspectJDemo" />
-
     <aop:config>
-        <aop:pointcut id="calc_all_method_pointcut" expression="execution(* com.john.spring.aop.CalcImpl.add(..))" />
+        <aop:pointcut id="calc_all_method_pointcut" expression="execution(* com.john.spring.aop.Calc.add(..))" />
         <aop:aspect ref="myAspectJ">
             <aop:around method="aroundAdvice" pointcut-ref="calc_all_method_pointcut" />
             <aop:before method="beforeMethod" pointcut-ref="calc_all_method_pointcut" />
@@ -18,7 +20,25 @@
             <aop:after method="afterMethod" pointcut-ref="calc_all_method_pointcut" />
             <aop:after-throwing method="afterThrowing" pointcut-ref="calc_all_method_pointcut" throwing="exception" />
         </aop:aspect>
-
     </aop:config>
+
+
+    <!-- XML方式配置Spring声明式事务 -->
+    <!--<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="query*" read-only="true" />
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="all_dao_method_pointcut" expression="execution(* com.john.spring.dao.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="all_dao_method_pointcut" />
+    </aop:config>-->
+    <!-- 声明式事务配置结束 -->
 
 </beans>

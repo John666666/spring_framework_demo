@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface StudentDao {
     List<Student> queryStudents();
+    public int[] batchInsertStudent(List<Student> studentList);
 }
