@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 引入外部properties文件 -->
+    <properties resource="jdbc.properties" />
+    <!-- 定义类型别名，在xxxMapper.xml文件中就可以用别名代替很长的类名 -->
+    <typeAliases>
+        <typeAlias type="com.john.spring.bean.Student" alias="Student" />
+    </typeAliases>
+
+    <!-- 配置不同环境的参数 -->
+    <environments default="development">
+        <!-- 开发环境数据库、事务配置 -->
+        <environment id="development">
+            <!-- 事务管理使用JDBC的事务 -->
+            <transactionManager type="JDBC"/>
+            <!-- 配置开发环境数据源 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver.className}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 将mapper SQL映射文件包含进来 -->
+    <mappers>
+        <mapper resource="mappers/StudentMapper.xml"/>
+    </mappers>
+</configuration>
