@@ -7,11 +7,12 @@
   <version>1.0-release</version>
   <modules>
     <module>spring-core</module>
+    <module>springmvc</module>
     <module>mybatis</module>
   </modules>
   <packaging>pom</packaging>
 
-  <name>demo_parent</name>
+  <name>springdemo</name>
   <url>http://maven.apache.org</url>
 
   <properties>

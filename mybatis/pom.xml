@@ -6,6 +6,7 @@
         <artifactId>demo_parent</artifactId>
         <groupId>com.john.spring</groupId>
         <version>1.0-release</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

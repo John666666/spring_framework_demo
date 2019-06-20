@@ -29,5 +29,6 @@
     <!-- 将mapper SQL映射文件包含进来 -->
     <mappers>
         <mapper resource="mappers/StudentMapper.xml"/>
+        <mapper class="com.john.spring.mapper.annotation.TeacherMapper" />
     </mappers>
 </configuration>

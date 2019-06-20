@@ -22,7 +22,7 @@ public class MybatisTest {
         try {
             in = Resources.getResourceAsStream("mybatis-config.xml");
             SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(in);
-            sessionFactory.getConfiguration().addMappers("com.john.spring.mapper.annotation");
+//            sessionFactory.getConfiguration().addMappers("com.john.spring.mapper.annotation");
             return sessionFactory;
         } catch (IOException e) {
             log.error("加载Mybatis配置文件失败", e);

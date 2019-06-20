@@ -24,10 +24,7 @@ public class TestMyBatis {
 
     @Test
     public void testInsertTeacher() {
-
         Teacher teacher = new Teacher("John");
         mybatisTest.insertTeacher(teacher);
-
     }
-
 }
