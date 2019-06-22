@@ -3,9 +3,11 @@ package com.john.spring.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
-public class Teacher {
+public class Teacher implements Serializable {
     private Integer id;
     private String tname;
 

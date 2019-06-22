@@ -27,11 +27,11 @@ public class TestMyBatis {
 
         // 初始化测试数据
         studentList = new ArrayList<>();
-        for(int i = 1; i <= 1000; i++) {
+        for (int i = 1; i <= 1000; i++) {
             Student student = new Student();
             student.setAge(i);
             student.setGender("男");
-            if(i % 2 == 0) {
+            if (i % 2 == 0) {
                 student.setSname("楚云飞");
                 student.setNickName("快枪手");
             } else {
@@ -60,10 +60,10 @@ public class TestMyBatis {
      */
     @Test
     public void testBatchInsertStudentByExectorTypeBatch() {
-        SqlSession sqlSession = MybatisUtil.getSessionFactory().openSession(ExecutorType.BATCH,false);
+        SqlSession sqlSession = MybatisUtil.getSessionFactory().openSession(ExecutorType.BATCH, false);
         try {
             StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
-            for(Student student : studentList) {
+            for (Student student : studentList) {
                 studentMapper.insert(student);
             }
             // 提交暂存在JDBC驱动中的批量语句
@@ -72,13 +72,13 @@ public class TestMyBatis {
             // 提交事务
             sqlSession.commit();
 
-            log.info("成功批量插入： " + studentList.size()+"条数据");
+            log.info("成功批量插入： " + studentList.size() + "条数据");
 
             // 从本批次插入数据中随机抽查10条数据的自增id
             Random random = new Random();
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 int idx = random.nextInt(studentList.size());
-                log.info("第"+(idx+1)+"条数据自增id: " + studentList.get(idx).getId());
+                log.info("第" + (idx + 1) + "条数据自增id: " + studentList.get(idx).getId());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,9 +105,9 @@ public class TestMyBatis {
 
             // 从本批次插入数据中随机抽查10条数据的自增id
             Random random = new Random();
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 int idx = random.nextInt(studentList.size());
-                log.info("第"+(idx+1)+"条数据自增id: " + studentList.get(idx).getId());
+                log.info("第" + (idx + 1) + "条数据自增id: " + studentList.get(idx).getId());
             }
 
         } catch (Exception e) {
@@ -132,7 +132,39 @@ public class TestMyBatis {
     @Test
     public void testQueryTeacher() {
         TeacherMapper teacherMapper = MybatisUtil.getSession().getMapper(TeacherMapper.class);
-        List<Teacher> teacherList = teacherMapper.queryAll();
-        System.out.println(teacherList);
+        System.out.println(teacherMapper.queryAll());
+    }
+
+    /**
+     * 测试一级缓存
+     * 将全局一级缓存分别设置为SESSION、STATEMENT，执行本测试，观察有什么不同
+     */
+    @Test
+    public void testLocalCache() {
+        TeacherMapper teacherMapper = MybatisUtil.getSession().getMapper(TeacherMapper.class);
+        for (int i = 0; i < 5; i++) {
+            List<Teacher> teacherList = teacherMapper.queryAll();
+            System.out.println(teacherList);
+        }
+    }
+
+    /**
+     * 测试二级缓存。 不需要同一个session，只要是同一个mapper命名空间就可以共享二级缓存。 <br />
+     * 注意：
+     * <ol>
+     *     <li>二级缓存不能跨多个SqlSessionFactory，所以必须是同一个SqlSession创建的sqlSession才可以</li>
+     *     <li>如果用同一个session连续多次查询是无法命中二级缓存的，因为在session关闭前，查询的数据不会写入二级缓存，自然也就无法命中了</li>
+     * </ol>
+     */
+    @Test
+    public void testSecondaryCache() {
+        for (int i = 0; i < 5; i++) {
+            SqlSession sqlSession = MybatisUtil.getSession();
+            TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
+            List<Teacher> teacherList = teacherMapper.queryAll();
+            sqlSession.close();
+            System.out.println(teacherList);
+        }
+
     }
 }

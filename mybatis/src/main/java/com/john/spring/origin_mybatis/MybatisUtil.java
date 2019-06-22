@@ -12,12 +12,18 @@ import java.io.InputStream;
 @Slf4j
 public class MybatisUtil {
 
-    public static SqlSessionFactory getSessionFactory() {
+    private static SqlSessionFactory sqlSessionFactory = null;
+
+    public synchronized static SqlSessionFactory getSessionFactory() {
+        if(sqlSessionFactory != null) {
+            return sqlSessionFactory;
+        }
         InputStream in = null;
         try {
             in = Resources.getResourceAsStream("mybatis-config.xml");
             SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(in);
 //            sessionFactory.getConfiguration().addMappers("com.john.spring.mapper.annotation");
+            sqlSessionFactory = sessionFactory;
             return sessionFactory;
         } catch (IOException e) {
             log.error("加载Mybatis配置文件失败", e);
