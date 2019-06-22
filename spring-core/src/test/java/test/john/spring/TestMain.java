@@ -45,8 +45,8 @@ public class TestMain {
                 stu.setNickName("云龙兄" + i);
                 stu.setGender("男");
             } else {
-                stu.setGender("女");
-                stu.setSname("李云飞" + i);
+                stu.setGender("男");
+                stu.setSname("楚云飞" + i);
                 stu.setNickName("云飞兄" + i);
             }
             stu.setAge(i);

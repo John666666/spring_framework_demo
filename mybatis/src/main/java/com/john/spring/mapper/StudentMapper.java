@@ -8,4 +8,7 @@ public interface StudentMapper {
 
     List<Student> queryAll();
 
+    int insert(Student student);
+
+    int insertBatch(List<Student> studentList);
 }

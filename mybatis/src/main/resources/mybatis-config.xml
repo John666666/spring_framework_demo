@@ -6,9 +6,35 @@
     <!-- 引入外部properties文件 -->
     <properties resource="jdbc.properties" />
     <!-- 定义类型别名，在xxxMapper.xml文件中就可以用别名代替很长的类名 -->
+    
+    <settings>
+        <!--日志框架，可选值有：SLF4J,LOG4J,JDK_LOGGING,COMMONS_LOGGING,STDOUT_LOGGING,NO_LOGGING-->
+        <setting name="logImpl" value="SLF4J"/>
+        <!-- 覆盖JDBC驱动中默认一次从数据库fetch多少条数据(rs.next()时)，注意：此属性并不能影响最终应用获取到的数据条数。默认值：null(未设置) -->
+        <setting name="defaultFetchSize" value="5"/>
+        <!-- 是否自动将数据库字段映射成小驼峰样式的POJO属性名，如数据库中是create_time，会自动映射成createTime。 默认值: false -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 一级缓存生效范围： SESSION（一次会话）、STATEMENT（一次statement）。默认值：SESSION -->
+        <setting name="localCacheScope" value="SESSION"/>
+        <!-- 全局的开启、关闭所有Mapper文件中配置的二级缓存。默认值：true -->
+        <setting name="cacheEnabled" value="true" />
+        <!-- 发现无法映射字段时如何处理： NONE（不做处理）、WARNING(输出警告日志)、FAILING（抛出SQLException异常）。 默认值：NONE -->
+        <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+        <!-- 指定 MyBatis 应如何自动映射列到字段或属性。NONE(不自动映射)、PARTIAL(只映射单表查询)、FULL(级联映射多表查询结果集)。默认值：PARTIAL -->
+        <setting name="autoMappingBehavior" value="PARTIAL" />
+        <!-- 全局延迟加载开关（针对关联对象），可在具体Mapper中通过fetchType覆盖这里的全局开关状态。默认值:false -->
+        <setting name="lazyLoadingEnabled" value="true" />
+        <!-- 是否使用数据库自动生成主键值，默认值：false -->
+        <setting name="useGeneratedKeys" value="false" />
+        <!-- 配置默认的执行器，SIMPLE(普通的执行器)、REUSE(执行器会重用预处理语句（prepared statements）)、BATCH(执行器将重用语句并执行批量更新)。 默认值：SIMPLE -->
+        <!-- 默认的SIMPLE已经可以满足大多数场景，所以一般不建议直接修改全局配置，而在执行具体语句(如批量插入)，获取SqlSession时指定执行器类型 -->
+        <setting name="defaultExecutorType" value="SIMPLE" />
+    </settings>
+    
     <typeAliases>
         <typeAlias type="com.john.spring.bean.Student" alias="Student" />
     </typeAliases>
+
 
     <!-- 配置不同环境的参数 -->
     <environments default="development">

@@ -1,9 +1,5 @@
 package com.john.spring.origin_mybatis;
 
-import com.john.spring.bean.Student;
-import com.john.spring.bean.Teacher;
-import com.john.spring.mapper.StudentMapper;
-import com.john.spring.mapper.annotation.TeacherMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -12,10 +8,9 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 @Slf4j
-public class MybatisTest {
+public class MybatisUtil {
 
     public static SqlSessionFactory getSessionFactory() {
         InputStream in = null;
@@ -31,18 +26,11 @@ public class MybatisTest {
     }
 
     public static SqlSession getSession() {
-        return getSessionFactory().openSession(true);
+        return getSessionFactory().openSession();
     }
 
-    public List<Student> queryAllStudent() {
-        StudentMapper mapper = getSession().getMapper(StudentMapper.class);
-        List<Student> studentList = mapper.queryAll();
-        return studentList;
-    }
-
-    public int insertTeacher(Teacher teacher) {
-        TeacherMapper mapper = getSession().getMapper(TeacherMapper.class);
-        return mapper.insertTeacher(teacher);
+    public static SqlSession getSession(boolean autoCommit) {
+        return getSessionFactory().openSession(autoCommit);
     }
 
 }

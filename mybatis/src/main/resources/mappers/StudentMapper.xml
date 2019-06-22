@@ -3,7 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.john.spring.mapper.StudentMapper">
+
+    <resultMap id="studentMap" type="Student">
+        <id column="id" property="id" />
+        <result column="sname" property="sname" />
+        <result column="age" property="age" />
+        <result column="gender" property="gender" />
+        <result column="nick_name" property="nickName" />
+    </resultMap>
+
+    <sql id="base_field">
+        sname, age, gender, nick_name
+    </sql>
+
+    <!-- 如果关闭自动映射，这里就不能用resultType属性，得用resultMap属性指定用我们自己定义的resultMap -->
     <select id="queryAll" resultType="Student">
-      select id, sname, age, gender, nick_name as nickName from student
+      select * from student
     </select>
+
+    <insert id="insert" parameterType="Student" useGeneratedKeys="true" keyProperty="id">
+        insert into student(sname, age, gender, nick_name) values (#{sname}, #{age}, #{gender}, #{nickName})
+    </insert>
+
+    <insert id="insertBatch" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+        insert into student( sname, age, gender, nick_name ) values
+        <foreach collection="list" item="stu" index="index" separator=",">
+            (#{stu.sname}, #{stu.age}, #{stu.gender}, #{stu.nickName})
+        </foreach>
+    </insert>
 </mapper>
