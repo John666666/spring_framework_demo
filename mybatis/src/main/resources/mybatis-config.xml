@@ -33,6 +33,7 @@
     
     <typeAliases>
         <typeAlias type="com.john.spring.bean.Student" alias="Student" />
+        <typeAlias type="com.john.spring.bean.Teacher" alias="Teacher" />
     </typeAliases>
 
 
@@ -55,6 +56,10 @@
     <!-- 将mapper SQL映射文件包含进来 -->
     <mappers>
         <mapper resource="mappers/StudentMapper.xml"/>
+        <mapper resource="mappers/TeacherMapper.xml"/>
+        <!-- 引入xml mapper会自动将namespace对应的Mapper接口也导入，不用重复导入 -->
+        <!--
         <mapper class="com.john.spring.mapper.annotation.TeacherMapper" />
+        -->
     </mappers>
 </configuration>

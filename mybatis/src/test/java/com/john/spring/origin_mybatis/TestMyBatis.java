@@ -1,5 +1,6 @@
 package com.john.spring.origin_mybatis;
 
+import com.john.spring.MyBatisTools;
 import com.john.spring.bean.Student;
 import com.john.spring.bean.Teacher;
 import com.john.spring.mapper.StudentMapper;
@@ -17,13 +18,15 @@ import java.util.Random;
 @Slf4j
 public class TestMyBatis {
 
-    MybatisUtil mybatisUtil = null;
+    StudentMapper studentMapper = null;
+    TeacherMapper teacherMapper = null;
     List<Student> studentList = null;
-
 
     @Before
     public void setUp() {
-        mybatisUtil = new MybatisUtil();
+        SqlSession sqlSession = MyBatisTools.getInstance().openSession();
+        studentMapper = sqlSession.getMapper(StudentMapper.class);
+        teacherMapper = sqlSession.getMapper(TeacherMapper.class);
 
         // 初始化测试数据
         studentList = new ArrayList<>();
@@ -47,8 +50,6 @@ public class TestMyBatis {
 
         // 通过命名空间+语句id的方式执行语句(不需要定义Mapper接口，但是容易书写错误)
         // List<Student> studentList = MybatisUtil.getSession(false).selectList("com.john.spring.mapper.StudentMapper.queryAll");
-
-        StudentMapper studentMapper = MybatisUtil.getSession().getMapper(StudentMapper.class);
         List<Student> studentList = studentMapper.queryAll();
 
         System.out.println(studentList);
@@ -60,7 +61,7 @@ public class TestMyBatis {
      */
     @Test
     public void testBatchInsertStudentByExectorTypeBatch() {
-        SqlSession sqlSession = MybatisUtil.getSessionFactory().openSession(ExecutorType.BATCH, false);
+        SqlSession sqlSession = MyBatisTools.getInstance().openSession(ExecutorType.BATCH, false);
         try {
             StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
             for (Student student : studentList) {
@@ -94,7 +95,7 @@ public class TestMyBatis {
     @Test
     public void testBatchInsertStudentByForEachSqlMapper() {
 
-        SqlSession sqlSession = MybatisUtil.getSessionFactory().openSession(false);
+        SqlSession sqlSession = MyBatisTools.getInstance().openSession(false);
         try {
             StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 
@@ -116,23 +117,26 @@ public class TestMyBatis {
         } finally {
             sqlSession.close();
         }
-
     }
-
 
     @Test
     public void testInsertTeacher() {
-
-        TeacherMapper teacherMapper = MybatisUtil.getSession().getMapper(TeacherMapper.class);
-
         Teacher teacher = new Teacher("银角大王");
         teacherMapper.insertTeacher(teacher);
     }
 
     @Test
     public void testQueryTeacher() {
-        TeacherMapper teacherMapper = MybatisUtil.getSession().getMapper(TeacherMapper.class);
-        System.out.println(teacherMapper.queryAll());
+        log.info("Teacher表数据：" + teacherMapper.queryAll());
+    }
+
+    /**
+     * 关联查询
+     */
+    @Test
+    public void testQueryTeacherCasecade() {
+        List<Teacher> teacherList = teacherMapper.queryAllCascade();
+        log.info("Teacher表数据： " + teacherList);
     }
 
     /**
@@ -141,7 +145,6 @@ public class TestMyBatis {
      */
     @Test
     public void testLocalCache() {
-        TeacherMapper teacherMapper = MybatisUtil.getSession().getMapper(TeacherMapper.class);
         for (int i = 0; i < 5; i++) {
             List<Teacher> teacherList = teacherMapper.queryAll();
             System.out.println(teacherList);
@@ -159,7 +162,7 @@ public class TestMyBatis {
     @Test
     public void testSecondaryCache() {
         for (int i = 0; i < 5; i++) {
-            SqlSession sqlSession = MybatisUtil.getSession();
+            SqlSession sqlSession = MyBatisTools.getInstance().openSession();
             TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
             List<Teacher> teacherList = teacherMapper.queryAll();
             sqlSession.close();

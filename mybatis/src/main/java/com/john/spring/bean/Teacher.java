@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
 public class Teacher implements Serializable {
     private Integer id;
     private String tname;
+    private List<Student> studentList;
 
     public Teacher() {
     }
@@ -28,6 +30,7 @@ public class Teacher implements Serializable {
         return "{" +
                 "id=" + id +
                 ", tname='" + tname + '\'' +
+                ", studentList='" + studentList + '\'' +
                 "}\n";
     }
 }

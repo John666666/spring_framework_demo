@@ -16,4 +16,6 @@ public interface TeacherMapper {
     @Select("select * from teacher")
     List<Teacher> queryAll();
 
+    List<Teacher> queryAllCascade();
+
 }
