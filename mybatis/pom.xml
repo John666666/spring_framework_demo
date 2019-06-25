@@ -58,6 +58,7 @@
                 </executions>
                 <configuration>
                     <includeCompileDependencies>true</includeCompileDependencies>
+                    <overwrite>true</overwrite>
                 </configuration>
             </plugin>
         </plugins>
