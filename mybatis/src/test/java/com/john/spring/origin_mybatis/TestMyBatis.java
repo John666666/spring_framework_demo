@@ -1,6 +1,5 @@
 package com.john.spring.origin_mybatis;
 
-import com.john.spring.MyBatisTools;
 import com.john.spring.bean.Student;
 import com.john.spring.bean.Teacher;
 import com.john.spring.mapper.StudentMapper;
