@@ -5,7 +5,12 @@
 <mapper namespace="com.john.spring.mapper.annotation.TeacherMapper">
 
     <resultMap id="teacherCascade" type="Teacher">
-        <id property="id" column="t_id" />
+        <!-- id标签和result标签的区别：
+			1. 用ID标签可以提升查询性能（官方说法）
+			2. 用ID标签配置的属性，如果结果集中该字段的值出现重复
+				，会自动去除（有点类似于数据库中主键的作用）
+		 -->
+		<id property="id" column="t_id" />
         <result property="tname" column="tname" />
         <collection property="studentList" ofType="Student">
             <id property="id" column="s_id" />
