@@ -40,6 +40,7 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/DispatcherServlet.xml</param-value>
         </init-param>
+        <multipart-config />
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
